@@ -1,0 +1,8 @@
+#!/usr/bin/fontforge
+
+if ($argc != 3)
+	Print ("Usage: <the sfd file> <the resulting font>")
+endif
+
+Open($1)
+Generate($2)

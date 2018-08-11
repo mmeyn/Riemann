@@ -1,0 +1,21 @@
+\documentclass{article}
+
+\usepackage{fontspec}
+\newfontface\riemannfont{Riemann}
+
+\newcommand{\func}[1]{{%
+  \leavevmode
+  \exhyphenchar=-1\relax
+  \hbox{%
+    \riemannfont
+    \catcode`_=12\relax
+    \catcode`~=12\relax
+    \scantokens{#1\empty}%
+  }%
+}}
+
+\begin{document}
+no unnecessary spaces: H\func{H}H
+
+testing most features: \func{(_5>/DD-79-.> D-46-~~.3~-.~-.5)[s-n] _5T_~4 _6/D_~-9_~->_~-~_5-8 t_3G-8-~-7->=DD-5v-> T-469~~~358}
+\end{document}

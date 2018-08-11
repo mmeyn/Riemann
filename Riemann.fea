@@ -1,0 +1,133 @@
+languagesystem DFLT dflt;
+languagesystem latn dflt;
+
+@UP   = [hyphen];
+@DOWN = [underscore];
+
+@LETTERS      = [N      n      v];
+@LETTERS_SUPS = [N.sups n.sups v.sups];
+@LETTERS_SUP2 = [N.sup2 n.sup2 v.sup2];
+@LETTERS_SUP3 = [N.sup3 n.sup3 v.sup3];
+
+@FIGURES      = [zero      one      two      three      four      five      six      seven      eight      nine];
+@FIGURES_SUBS = [zero.subs one.subs two.subs three.subs four.subs five.subs six.subs seven.subs eight.subs nine.subs];
+@FIGURES_SUPS = [zero.sups one.sups two.sups three.sups four.sups five.sups six.sups seven.sups eight.sups nine.sups];
+@FIGURES_SUP2 = [zero.sup2 one.sup2 two.sup2 three.sup2 four.sup2 five.sup2 six.sup2 seven.sup2 eight.sup2 nine.sup2];
+@FIGURES_SUP3 = [zero.sup3 one.sup3 two.sup3 three.sup3 four.sup3 five.sup3 six.sup3 seven.sup3 eight.sup3 nine.sup3];
+
+@SYMBOLS      = [period     asciitilde less      greater];
+@SYMBOLS_SUBS = [space.subs line.subs  less.subs greater.subs];
+@SYMBOLS_SUPS = [space.sups line.sups  less.sups greater.sups];
+@SYMBOLS_SUP2 = [space.sup2 line.sup2  less.sup2 greater.sup2];
+@SYMBOLS_SUP3 = [space.sup3 line.sup3  less.sup3 greater.sup3];
+
+@BASE = [@FIGURES      @SYMBOLS];
+@SUBS = [@FIGURES_SUBS @SYMBOLS_SUBS]; # Baßtöne
+@BASE_SUPS = [@LETTERS @BASE];
+@SUPS = [@LETTERS_SUPS @FIGURES_SUPS @SYMBOLS_SUPS]; # 1. (unterste Reihe) Optionstöne
+@SUP2 = [@LETTERS_SUP2 @FIGURES_SUP2 @SYMBOLS_SUP2]; # 2. Reihe
+@SUP3 = [@LETTERS_SUP3 @FIGURES_SUP3 @SYMBOLS_SUP3]; # 3. Reihe
+
+@DSUBS = [five_greater.subs nine_greater.subs]; # Ligaturen 5> und 9> für Baßtöne unterm Funktionssymbol
+
+# verschiedene Klassen von Funktionssymbolen für Positionierung von Baßtönen
+@FUNC1 = [D_D S_S slash_D_D slash_S_S];
+@FUNC2 = [d_d s_s];
+@FUNC3 = [T S D d slash_T slash_S slash_D slash_d];
+@FUNC4 = [t s slash_t slash_s];
+@FUNC5 = [G P];
+@FUNC6 = [g p];
+
+lookup EINS {
+
+	# -X stellt X in die 1. Optionsreihe
+	sub @UP N by N.sups;
+	sub @UP n by n.sups;
+	sub @UP v by v.sups;
+	sub @UP zero  by zero.sups;
+	sub @UP one   by one.sups;
+	sub @UP two   by two.sups;
+	sub @UP three by three.sups;
+	sub @UP four  by four.sups;
+	sub @UP five  by five.sups;
+	sub @UP six   by six.sups;
+	sub @UP seven by seven.sups;
+	sub @UP eight by eight.sups;
+	sub @UP nine  by nine.sups;
+	sub @UP period     by space.sups;
+	sub @UP asciitilde by line.sups;
+	sub @UP less       by less.sups;
+	sub @UP greater    by greater.sups;
+
+} EINS;
+
+feature liga {
+
+	# Ligaturen für Funktionssymbole
+	sub slash D D by slash_D_D;
+	sub slash S S by slash_S_S;
+	sub D D by D_D;
+	sub d d by d_d;
+	sub S S by S_S;
+	sub s s by s_s;
+	sub slash D by slash_D;
+	sub slash d by slash_d;
+	sub slash S by slash_S;
+	sub slash s by slash_s;
+	sub slash T by slash_T;
+	sub slash t by slash_t;
+
+	# Ligaturen 5> und 9> (s. o.)
+	sub @DOWN five greater by five_greater.subs;
+	sub @DOWN nine greater by nine_greater.subs;
+
+	# _X stellt X nach unten
+	sub @DOWN zero  by zero.subs;
+	sub @DOWN one   by one.subs;
+	sub @DOWN two   by two.subs;
+	sub @DOWN three by three.subs;
+	sub @DOWN four  by four.subs;
+	sub @DOWN five  by five.subs;
+	sub @DOWN six   by six.subs;
+	sub @DOWN seven by seven.subs;
+	sub @DOWN eight by eight.subs;
+	sub @DOWN nine  by nine.subs;
+	sub @DOWN period     by space.subs;
+	sub @DOWN asciitilde by line.subs;
+	sub @DOWN less       by less.subs;
+	sub @DOWN greater    by greater.subs;
+
+	sub @SUBS @BASE'      by @SUBS; # Baß → Baß
+	sub @SUPS @BASE_SUPS' by @SUP2; # 1. Reihe → 2.
+	sub @SUP2 @BASE_SUPS' by @SUP3; # 2. → 3.
+	sub @SUP3 @BASE_SUPS' by @SUPS; # 3. → 1.
+
+	# 2. und 3. Reihe vertikal über der 1.
+	pos @SUP2 <-367 480 -367 0>;
+	pos @SUP3 <-367 960 -367 0>;
+
+	# Baßtöne unter Grundlinie
+	pos [@SUBS @DSUBS] <0 -300 0 0>;
+
+	# 1. Reihe vertikal über dem Baß
+	pos @SUBS @SUPS <0 0 -367 0>;
+
+	# Baßtöne unter Funktionssymbolen
+	pos @SUBS @FUNC1 < 180 -175 -367 0>;
+	pos @SUBS @FUNC2 < 180 -150 -367 0>;
+	pos @SUBS @FUNC3 < 120    0 -367 0>;
+	pos @SUBS @FUNC4 <  30    0 -367 0>;
+	pos @SUBS @FUNC5 <-120    0 -367 0>;
+	pos @SUBS @FUNC6 <-180 -175 -367 0>;
+
+	# 5> und 9> unter Funktionssymbolen (wie oben, aber -180 bzw. -120 versetzt)
+	pos @DSUBS @FUNC1 <   0 -175 -734 0>;
+	pos @DSUBS @FUNC2 <   0 -150 -734 0>;
+	pos @DSUBS @FUNC3 < -60    0 -734 0>;
+	pos @DSUBS @FUNC4 <-150    0 -734 0>;
+	pos @DSUBS @FUNC5 <-240    0 -734 0>;
+	pos @DSUBS @FUNC6 <-300 -175 -367 0>;
+
+	lookup EINS;
+
+} liga;

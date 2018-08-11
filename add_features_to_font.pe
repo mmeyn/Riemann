@@ -1,0 +1,9 @@
+#!/usr/bin/fontforge
+
+if ($argc != 4)
+	Print ("Usage: <the font> <the feature file> <the resulting font>")
+endif
+
+Open($1)
+MergeFeature($2)
+Generate($3)
